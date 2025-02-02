@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Page</title>
+    <style>
+      /* Global Styling */
+      body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #007bff, #6c757d);
+      }
+
+      /* Form Container */
+      form {
+        width: 100%;
+        max-width: 450px;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      /* Form Heading */
+      form h2 {
+        text-align: center;
+        color: #007bff;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+      }
+
+      /* Form Inputs */
+      form div {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #333;
+        font-size: 0.95rem;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="file"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      input[type="file"]:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      }
+
+      input[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+      }
+
+      input[type="submit"]:active {
+        transform: translateY(0);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 600px) {
+        form {
+          padding: 20px;
+        }
+
+        form h2 {
+          font-size: 1.5rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        input[type="submit"] {
+          font-size: 0.9rem;
+        }
+      }
+
+      /* Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <h2>Admin Form</h2>
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" placeholder="Enter the name" />
+      </div>
+      <div>
+        <label for="price">Price:</label>
+        <input type="number" name="price" id="price" placeholder="Enter the price" />
+      </div>
+      <div>
+        <label for="description">Description:</label>
+        <input type="text" name="description" id="description" placeholder="Enter the description" />
+      </div>
+      <div>
+        <label for="image">Image:</label>
+        <input type="file" name="image" id="image" />
+      </div>
+      <input type="submit" value="Submit" />
+      
+    </form>
+    <script>
+      const form = document.querySelector("form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = {};
+        Array.from(form.elements).forEach((input) => {
+          if (input.tagName === "INPUT") {
+            if (input.type === "file") {
+              const file = input.files[0];
+              const reader = new FileReader();
+              reader.onload = async () => {
+                formData[input.name] = reader.result;
+                const response = await fetch("http://localhost:7777/addAdmin", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(formData),
+                });
+                const data = await response.json();
+                console.log(data);
+              };
+              reader.readAsDataURL(file);
+            } else if (input.type != "submit") {
+              formData[input.name] = input.value;
+            }
+          }
+        });
+        console.log("form data", formData);
+      });
+    </script>
+  </body>
+</html>
