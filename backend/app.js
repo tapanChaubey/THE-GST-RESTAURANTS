@@ -64,7 +64,7 @@ app.get("/addAdmin", async (req, res) => {
     res.render("add.ejs");
 });
 
-app.post("/addAdmin", verifyToken, async (req, res) => {
+app.post("/addAdmin",  async (req, res) => {
     console.log("Admin Addition Process...");
     const { name, description, price, image } = req.body;
 

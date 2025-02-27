@@ -1,109 +1,119 @@
 import React, { useContext, useState } from "react";
-import delivery from "../assets/delivery1.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import delivery from "../assets/banner-mobile.png";
 import { UserContext } from "../contexts/useUserContext";
 import { useNavigate, useParams } from "react-router-dom";
 import useAPI from "../hooks/useAPI";
 
-function Login() {
+const Login = () => {
   const { setAccessToken, setUserId } = useContext(UserContext);
   const api = useAPI();
-  const [userdata, setUserdata] = useState({});
+  const [userdata, setUserdata] = useState({ email: "", password: "" });
   const [msg, setMsg] = useState("");
+  const [error, setError] = useState("");
   const navigation = useNavigate();
   const { next } = useParams();
 
-  async function submitHandler(e) {
-    e.preventDefault();
-    const data = await api.post("login", userdata);
-    if (data.token) {
-      setAccessToken(data.token);
-      setUserId(data.userId);
-      navigation(next || "/");
-    } else {
-      setMsg(data.msg);
-    }
-  }
+  const handleFormChange = (e) => {
+    setUserdata({ ...userdata, [e.target.name]: e.target.value });
+  };
 
-  function HandlerFrom(e) {
-    setUserdata({
-      ...userdata,
-      [e.target.name]: e.target.value,
-    });
-  }
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    if (userdata.email && userdata.password) {
+      const data = await api.post("login", userdata);
+      if (data.token) {
+        setAccessToken(data.token);
+        setUserId(data.userId);
+        navigation(next || "/");
+      } else {
+        setError(data.msg);
+      }
+    } else {
+      setError("All fields are required.");
+    }
+  };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-screen">
-      {/* Left Section - Login Form */}
-      <div className="flex flex-col justify-center items-center bg-gradient-to-r from-blue-900 to-blue-700 py-6 px-6">
-        <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
-        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-blue-900 mb-6 whitespace-nowrap overflow-hidden">
-  Login to Your Account
-</h1>
-
+    <div className="grid grid-cols-1 lg:grid-cols-2 w-full min-h-screen bg-gray-100  py-8 md:px-12 lg:px-20  items-stretch lg:items-center flex flex-col-reverse lg:flex-row">
       
+      {/* Left Section - Image */}
+      <div className="bg-white w-full flex flex-col items-center p-4 rounded-lg shadow-1xl h-full border border-gray-200">
+        <div className="w-full flex justify-center items-center mb-6">
+          <img
+            src={delivery}
+            className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-contain rounded-lg shadow-lg border border-gray-300"
+            alt="Login Banner"
+          />
+        </div>
+        <div className="text-center w-full px-4 ">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-extrabold text-gray-800 leading-snug">
+            Order food. Discover best restaurants. <br />
+            <span className="text-violet-900 italic font-black drop-shadow-lg">
+              Chaubey Food Hub!
+            </span>
+          </h2>
+        </div>
+      </div>
+
+      {/* Right Section - Login Form */}
+      <div className="flex items-center justify-center p-4 md:p-8 h-full">
+        <div className="w-full max-w-md md:max-w-lg bg-white p-8 rounded-lg shadow-xl h-full flex flex-col justify-center">
+        <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-violet-900 text-center mb-6 leading-tight w-full max-w-max mx-auto whitespace-nowrap">
+        Login to Your Account
+      </h1>
+      
+
           <form onSubmit={submitHandler} className="space-y-5">
             <div>
-              <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+              <label htmlFor="email" className="block text-gray-700 font-medium">
                 Email*
               </label>
               <input
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-400"
                 type="email"
+                placeholder="Enter your email"
                 name="email"
                 id="email"
-                onChange={HandlerFrom}
-                placeholder="Enter your email"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                value={userdata.email}
+                onChange={handleFormChange}
+                required
               />
             </div>
+
             <div>
-              <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
+              <label htmlFor="password" className="block text-gray-700 font-medium">
                 Password*
               </label>
               <input
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-violet-400"
                 type="password"
+                placeholder="Enter your password"
                 name="password"
                 id="password"
-                onChange={HandlerFrom}
-                placeholder="Enter your password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                value={userdata.password}
+                onChange={handleFormChange}
+                required
               />
             </div>
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white text-lg font-semibold py-3 rounded-lg shadow-md hover:bg-blue-700 transition-all"
-            >
+
+            <button className="w-full bg-violet-900 text-white font-semibold py-3 rounded-md hover:bg-violet-800 transition-transform hover:scale-105">
               Login
             </button>
           </form>
 
-          {/* Google Login */}
-          <button className="w-full mt-5 flex items-center justify-center bg-gray-50 border border-gray-300 py-3 rounded-lg font-semibold text-gray-700 shadow-md hover:border-blue-500 hover:shadow-lg transition-all">
+          <button className="w-full mt-5 flex items-center justify-center bg-white border border-gray-300 py-3 rounded-md font-semibold text-gray-700 shadow-md hover:border-violet-500 hover:shadow-lg transition-transform hover:scale-105">
             <FontAwesomeIcon className="mr-2 text-red-500" icon={faGoogle} />
             Sign in with Google
           </button>
 
-          {/* Error Message */}
-          {msg && <p className="text-lg text-red-600 font-semibold text-center mt-4">{msg}</p>}
+          {msg && <p className="text-lg text-green-600 font-semibold text-center mt-4">{msg}</p>}
+          {error && <p className="text-lg text-red-600 font-semibold text-center mt-4">{error}</p>}
         </div>
-      </div>
-
-      {/* Right Section - Image with Text */}
-      <div className="relative flex justify-center items-center bg-blue-900">
-        <img
-          className="w-full h-full object-cover opacity-75"
-          src={delivery}
-          alt="Food Delivery"
-        />
-        <h1 className="absolute bottom-10 sm:bottom-12 md:bottom-16 lg:bottom-20 text-center text-white font-bold leading-tight 
-              text-2xl sm:text-3xl md:text-4xl lg:text-5xl px-4 sm:px-8 w-full whitespace-normal">
-  Order food. Discover best restaurants. <i>Chaubey Food Hub!</i>
-</h1>
-
       </div>
     </div>
   );
-}
+};
 
 export default Login;

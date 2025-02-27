@@ -12,6 +12,7 @@ import AddCard from './pages/AddCard.jsx';
 import Order from './pages/Order.jsx';
 import Payment from './pages/Payment.jsx';
 import PaymentStatus from './pages/PaymentStatus.jsx';
+import Contact from './pages/Contact.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
         <Route path='/addOrder/:id' element={<Order/>}/>
         <Route path='/payment' element={<Payment/>}/>
         <Route path='/status' element={<PaymentStatus/>}/>
+        <Route path="/contact" element={<Contact/>}/>
     </Route>
 ))
 

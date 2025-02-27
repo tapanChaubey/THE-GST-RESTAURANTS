@@ -40,16 +40,16 @@ const Footer = () => {
         <div className="flex flex-col gap-4 items-center md:items-start">
           <p className="text-lg font-bold text-gray-900">SOCIAL LINKS</p>
           <div className="flex gap-6 mt-2">
-            <Link className="text-blue-500 hover:scale-110 transition-all duration-300">
+            <Link to={`https://www.linkedin.com/in/tapanchaubey/`} className="text-blue-500 hover:scale-110 transition-all duration-300">
               <FaLinkedin size={28} />
             </Link>
-            <Link className="text-gray-700 hover:scale-110 transition-all duration-300">
+            <Link to={`https://github.com/tapanChaubey`} className="text-gray-700 hover:scale-110 transition-all duration-300">
               <FaGithub size={28} />
             </Link>
-            <Link className="text-pink-500 hover:scale-110 transition-all duration-300">
+            <Link to={`https://www.instagram.com/tapankumar4702/?hl=en`} className="text-pink-500 hover:scale-110 transition-all duration-300">
               <IoLogoInstagram size={28} />
             </Link>
-            <Link className="text-red-500 hover:scale-110 transition-all duration-300">
+            <Link to={'https://www.linkedin.com/in/tapanchaubey/'} className="text-red-500 hover:scale-110 transition-all duration-300">
               <SiGmail size={28} />
             </Link>
           </div>
